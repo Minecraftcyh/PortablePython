@@ -3,12 +3,14 @@ import os
 import getopt
 import traceback
 import json
+import locale
 
-version="v1.0.2-alpha"
+version="1.0.2-alpha"
 programname="PortablePython"
 
 language={
 	"en":{
+		"DisplayVersion":f"The version of {programname} is v{version}",
 		"BeforeCleanTip":"Previously running code will not be cleared, but the terminal will be cleared and the previous code cannot be viewed. Are you sure you want to empty it? (yes or no)>> ",
 		"UserManual":f"""{programname} User Manual v{version}
   Usage1. Add Python files directly from the command line, For example:
@@ -78,12 +80,11 @@ language={
   Usage11. Use the -h or --help parameter to view help, For example:
     {programname}.exe -h/--help
 				""",
-		"DiplayVersion":f"The version of {programname} is v{version}",
 		"DevelopTip":"It is currently under development and cannot be used temporarily. Please be patient and wait",
 		"Prompt":f"{programname} Version {version}\nUse -h or --help to view help  Current work path: \"{os.getcwd()}\"\nSave as Python File: ",
 		"CurrentPath":f"Current work path: ",
-		True:"Yes",
-		False:"No",
+		"Yes":"Yes",
+		"No":"No",
 		"OutputComplexity":{
 			"Concise":"Error Mode: concise.",
 			"Detailed":"Error Mode: detaile."
@@ -93,6 +94,7 @@ language={
 		}
 	},
 	"cn":{
+		"DiplayVersion":f"{programname}现在的版本是v{version}",
 		"BeforeCleanTip":"之前运行过的代码不会清除，但终端将会清空，且无法查看之前的代码。你确定要清空吗？（yes或no）>> ",
 		"UserManual":f"""{programname} 使用手册 v{version}
   用法1. 直接在命令行添加Python文件，例如：
@@ -162,12 +164,11 @@ language={
   Usage10. 在命令行使用-h或--help参数获取帮助，例如：
     {programname}.exe -h/--help
 				""",
-		"DiplayVersion":f"{programname}现在的版本是v{version}",
 		"DevelopTip":"它目前正在开发中，暂时无法使用。敬请期待……",
 		"Prompt":f"{programname} Version {version}\n使用-h或--help获取帮助  当前工作路径：\"{os.getcwd()}\"\n是否保存为Python文件：",
 		"CurrentPath":"当前工作路径：",
-		True:"是",
-		False:"否",
+		"Yes":"是",
+		"No":"否",
 		"OutputComplexity":{
 			"Concise":"报错模式：简洁。",
 			"Detailed":"报错模式：详细。"
@@ -178,7 +179,11 @@ language={
 	}
 }
 
-lang=language["en"]
+language_type=locale.getdefaultlocale()[1]
+if language_type == "en_US":
+	lang=language["en"]
+elif language_type == "zh_CN":
+	lang=language["cn"]
 
 code=""
 namespace={}
@@ -206,7 +211,7 @@ def explain(outputmode="concise"):
 	global currentPath
 
 	print(lang["Prompt"],end="")
-	print(lang[savecode],end="  ")
+	print(lang[str(savecode)],end="  ")
 	print(lang["OutputComplexity"][outputmode.title()])
 	exec(f"import sys\nsys.argv={sys.argv[1:]}",namespace)
 	while True:
@@ -334,9 +339,8 @@ def main(args=sys.argv):
 			exec(compile_code,namespace)
 		return 0
 	except IndexError:
-		return 1
-	lang=language["en"]
-	explain()
-	return 0
+		lang=language["en"]
+		explain()
+		return 0
 
-sys.exit(main())
+#sys.exit(main())
