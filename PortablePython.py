@@ -183,7 +183,7 @@ language={
 }
 
 lang=language["en"]
-language_type=locale.getdefaultlocale()[1]
+language_type=locale.getdefaultlocale()[0]
 if language_type == "en_US":
 	lang=language["en"]
 elif language_type == "zh_CN":
