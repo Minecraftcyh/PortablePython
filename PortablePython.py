@@ -8,7 +8,7 @@ import traceback
 import json
 import locale
 
-version="1.0.2-alpha"
+version="1.0.1-alpha"
 programname="PortablePython"
 
 language={
