@@ -1,5 +1,8 @@
 import sys
 import os
+BASE_DIR=os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.join(BASE_DIR,"client"))
+
 import getopt
 import traceback
 import json
@@ -7,7 +10,6 @@ import locale
 
 version="1.0.2-alpha"
 programname="PortablePython"
-
 
 language={
 	"en":{
@@ -84,8 +86,8 @@ language={
 		"DevelopTip":"It is currently under development and cannot be used temporarily. Please be patient and wait",
 		"Prompt":f"{programname} Version {version}\nUse -h or --help to view help  Current work path: \"{os.getcwd()}\"\nSave as Python File: ",
 		"CurrentPath":f"Current work path: ",
-		"Yes":"Yes",
-		"No":"No",
+		"True":"Yes",
+		"False":"No",
 		"OutputComplexity":{
 			"Concise":"Error Mode: concise.",
 			"Detailed":"Error Mode: detaile."
@@ -168,8 +170,8 @@ language={
 		"DevelopTip":"它目前正在开发中，暂时无法使用。敬请期待……",
 		"Prompt":f"{programname} Version {version}\n使用-h或--help获取帮助  当前工作路径：\"{os.getcwd()}\"\n是否保存为Python文件：",
 		"CurrentPath":"当前工作路径：",
-		"Yes":"是",
-		"No":"否",
+		"True":"是",
+		"False":"否",
 		"OutputComplexity":{
 			"Concise":"报错模式：简洁。",
 			"Detailed":"报错模式：详细。"
@@ -180,7 +182,7 @@ language={
 	}
 }
 
-
+lang=language["en"]
 language_type=locale.getdefaultlocale()[1]
 if language_type == "en_US":
 	lang=language["en"]
@@ -211,6 +213,7 @@ def explain(outputmode="concise"):
 	global allcode
 	global savecode
 	global currentPath
+	global lang
 
 	print(lang["Prompt"],end="")
 	print(lang[str(savecode)],end="  ")
@@ -221,12 +224,19 @@ def explain(outputmode="concise"):
 			code=input(">>> ")
 		except:
 			if savecode:
-				with open(input("Your Python File name>> "),"w",encoding="utf-8") as f:
+				fn=input("Your Python File name>> ")
+				while not fn == "":
+					fn=input("The file name mustn't be empty! Reentry it>> ")
+				with open(fn,"w",encoding="utf-8") as f:
 					f.write(allcode)
 			break
 		if code in ("exit","quit"):
-			with open(input("Your Python File name>> "),"w",encoding="utf-8") as f:
-				f.write(allcode)
+			if savecode:
+				fn=input("Your Python File name>> ")
+				while not fn == "":
+					fn=input("The file name mustn't be empty! Reentry it>> ")
+				with open(fn,"w",encoding="utf-8") as f:
+					f.write(allcode)
 			break
 		while code == "clean":
 			choice=input(lang["BeforeCleanTip"])
@@ -345,4 +355,4 @@ def main(args=sys.argv):
 		explain()
 		return 0
 
-#sys.exit(main())
+sys.exit(main())
