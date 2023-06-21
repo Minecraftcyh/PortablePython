@@ -8,6 +8,7 @@ import locale
 version="1.0.2-alpha"
 programname="PortablePython"
 
+
 language={
 	"en":{
 		"DisplayVersion":f"The version of {programname} is v{version}",
@@ -178,6 +179,7 @@ language={
 		}
 	}
 }
+
 
 language_type=locale.getdefaultlocale()[1]
 if language_type == "en_US":
